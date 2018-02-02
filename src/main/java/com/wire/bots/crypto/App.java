@@ -18,5 +18,6 @@ public class App extends Application<Config> {
         environment.jersey().register(new EncryptPrekeysResource(crypto));
         environment.jersey().register(new EncryptDevicesResource(crypto));
         environment.jersey().register(new DecryptResource(crypto));
+        environment.jersey().register(new StatusResource());
     }
 }

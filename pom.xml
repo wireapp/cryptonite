@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.wire.bots</groupId>
-    <artifactId>crypto</artifactId>
+    <artifactId>cryptonite</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <repositories>
@@ -102,6 +102,13 @@
         </dependency>
     </dependencies>
     <build>
+        <extensions>
+            <extension>
+                <groupId>io.packagecloud.maven.wagon</groupId>
+                <artifactId>maven-packagecloud-wagon</artifactId>
+                <version>0.0.4</version>
+            </extension>
+        </extensions>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -125,7 +132,7 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.4.3</version>
                 <configuration>
-                    <finalName>crypto</finalName>
+                    <finalName>cryptonite</finalName>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                     <filters>
                         <filter>
@@ -159,5 +166,18 @@
             </plugin>
         </plugins>
     </build>
-
+    <distributionManagement>
+        <repository>
+            <id>packagecloud-dkovacevic</id>
+            <url>
+                packagecloud+https://packagecloud.io/dkovacevic/cryptonite
+            </url>
+        </repository>
+        <snapshotRepository>
+            <id>packagecloud-dkovacevic</id>
+            <url>
+                packagecloud+https://packagecloud.io/dkovacevic/cryptonite
+            </url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
