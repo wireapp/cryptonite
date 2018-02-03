@@ -1,4 +1,4 @@
-package com.wire.bots.crypto;
+package com.wire.bots.cryptonite.resource;
 
 
 import javax.ws.rs.GET;

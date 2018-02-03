@@ -1,4 +1,4 @@
-package com.wire.bots.crypto;
+package com.wire.bots.cryptonite;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;

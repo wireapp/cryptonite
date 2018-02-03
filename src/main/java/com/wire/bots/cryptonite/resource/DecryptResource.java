@@ -1,9 +1,10 @@
-package com.wire.bots.crypto;
+package com.wire.bots.cryptonite.resource;
 
 import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
-import com.wire.bots.crypto.model.CipherMessage;
-import com.wire.bots.sdk.OtrManager;
+import com.wire.bots.cryptonite.CryptoRepo;
+import com.wire.bots.cryptonite.model.CipherMessage;
+import com.wire.bots.sdk.crypto.Crypto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -17,11 +18,10 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.TEXT_PLAIN)
 @Path("/decrypt/{botId}")
 public class DecryptResource {
-    private final Crypto crypto;
+    private final CryptoRepo cryptoRepo;
 
-    public DecryptResource(Crypto crypto) {
-
-        this.crypto = crypto;
+    public DecryptResource(CryptoRepo cryptoRepo) {
+        this.cryptoRepo = cryptoRepo;
     }
 
     @POST
@@ -31,7 +31,7 @@ public class DecryptResource {
     public Response decrypt(@ApiParam @PathParam("botId") String botId,
                             @ApiParam CipherMessage payload) throws Exception {
 
-        OtrManager manager = crypto.get(botId);
+        Crypto manager = cryptoRepo.get(botId);
         byte[] decrypt = manager.decrypt(payload.userId, payload.clientId, payload.content);
 
         return Response

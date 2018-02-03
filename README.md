@@ -1,2 +1,2 @@
-# crypto
+# Cryptonite
 Cryptobox Service

@@ -1,7 +1,7 @@
 FROM dejankovacevic/bots.runtime:latest
 
-COPY target/crypto.jar /opt/crypto/crypto.jar
-COPY crypto.yaml       /etc/crypto/crypto.yaml
+COPY target/cryptonite.jar /opt/cryptonite/cryptonite.jar
+COPY cryptonite.yaml       /etc/cryptonite/cryptonite.yaml
 
-WORKDIR /opt/crypto
+WORKDIR /opt/cryptonite
 

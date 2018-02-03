@@ -1,9 +1,10 @@
-package com.wire.bots.crypto;
+package com.wire.bots.cryptonite.resource;
 
 import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
-import com.wire.bots.crypto.model.PrekeysMessage;
-import com.wire.bots.sdk.OtrManager;
+import com.wire.bots.cryptonite.CryptoRepo;
+import com.wire.bots.cryptonite.model.PrekeysMessage;
+import com.wire.bots.sdk.crypto.Crypto;
 import com.wire.bots.sdk.models.otr.PreKey;
 import com.wire.bots.sdk.models.otr.Recipients;
 import io.swagger.annotations.Api;
@@ -21,11 +22,10 @@ import java.util.Base64;
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/encrypt/prekeys/{botId}")
 public class EncryptPrekeysResource {
-    private final Crypto crypto;
+    private final CryptoRepo cryptoRepo;
 
-    public EncryptPrekeysResource(Crypto crypto) {
-
-        this.crypto = crypto;
+    public EncryptPrekeysResource(CryptoRepo cryptoRepo) {
+        this.cryptoRepo = cryptoRepo;
     }
 
     @POST
@@ -35,7 +35,7 @@ public class EncryptPrekeysResource {
     public Response encrypt(@ApiParam @PathParam("botId") String botId,
                             @ApiParam PrekeysMessage payload) throws Exception {
 
-        OtrManager manager = crypto.get(botId);
+        Crypto manager = cryptoRepo.get(botId);
         byte[] content = Base64.getDecoder().decode(payload.content);
         Recipients encrypt = manager.encrypt(payload.preKeys, content);
 
@@ -50,7 +50,7 @@ public class EncryptPrekeysResource {
                                @QueryParam("from") Integer from,
                                @QueryParam("n") Integer n) throws Exception {
 
-        OtrManager manager = crypto.get(botId);
+        Crypto manager = cryptoRepo.get(botId);
         ArrayList<PreKey> preKeys = manager.newPreKeys(from, n);
 
         return Response
@@ -63,7 +63,7 @@ public class EncryptPrekeysResource {
     @Path("/last")
     public Response getLastPrekey(@ApiParam @PathParam("botId") String botId) throws Exception {
 
-        OtrManager manager = crypto.get(botId);
+        Crypto manager = cryptoRepo.get(botId);
         PreKey preKey = manager.newLastPreKey();
 
         return Response

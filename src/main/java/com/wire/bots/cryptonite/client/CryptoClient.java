@@ -1,9 +1,9 @@
-package com.wire.bots.crypto.client;
+package com.wire.bots.cryptonite.client;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
-import com.wire.bots.crypto.model.CipherMessage;
-import com.wire.bots.crypto.model.DevicesMessage;
-import com.wire.bots.crypto.model.PrekeysMessage;
+import com.wire.bots.cryptonite.model.CipherMessage;
+import com.wire.bots.cryptonite.model.DevicesMessage;
+import com.wire.bots.cryptonite.model.PrekeysMessage;
 import com.wire.bots.sdk.models.otr.Missing;
 import com.wire.bots.sdk.models.otr.PreKey;
 import com.wire.bots.sdk.models.otr.PreKeys;
@@ -25,12 +25,11 @@ public class CryptoClient {
         this.target = target;
     }
 
-    public CryptoClient(String host, int port) {
-        String httpUrl = String.format("http://%s:%d", host, port);
+    public CryptoClient(String uri) {
         ClientConfig cfg = new ClientConfig(JacksonJsonProvider.class);
         target = JerseyClientBuilder
                 .createClient(cfg)
-                .target(httpUrl);
+                .target(uri);
     }
 
     public Recipients encrypt(String botId, PreKeys preKeys, String content) {
@@ -87,7 +86,7 @@ public class CryptoClient {
                 });
     }
 
-    public PreKey getLastPreKey(String botId) {
+    public PreKey newLastPreKey(String botId) {
         return target.
                 path("encrypt/prekeys").
                 path(botId).

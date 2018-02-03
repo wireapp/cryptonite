@@ -1,4 +1,4 @@
-package com.wire.bots.crypto.model;
+package com.wire.bots.cryptonite.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wire.bots.sdk.models.otr.Missing;
