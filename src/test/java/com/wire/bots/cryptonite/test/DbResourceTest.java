@@ -4,21 +4,20 @@ import com.wire.bots.cryptonite.App;
 import com.wire.bots.cryptonite.Config;
 import com.wire.bots.cryptonite.StorageService;
 import com.wire.bots.cryptonite.client.StorageClient;
-import com.wire.bots.cryptonite.resource.StorageResource;
-import com.wire.bots.sdk.server.model.NewBot;
+import com.wire.bots.cryptonite.resource.DbResource;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-public class StorageResourceTest {
+public class DbResourceTest {
     @ClassRule
     public static final DropwizardAppRule<Config> app = new DropwizardAppRule<>(App.class, "cryptonite.yaml");
 
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
-            .addResource(new StorageResource())
+            .addResource(new DbResource())
             .build();
 
     private final static String BOT_ID = "test";
@@ -32,22 +31,17 @@ public class StorageResourceTest {
     }
 
     @Test
-    public void testStorage() throws Exception {
-        NewBot newBot = new NewBot();
-        newBot.id = BOT_ID;
-        newBot.client = "client";
-        newBot.token = "token";
-
-        boolean b = service.saveState(newBot);
+    public void testDb() throws Exception {
+        String file = "file";
+        String content = "this is a test";
+        boolean b = service.saveFile(file, content);
         assert b;
 
-        NewBot state = service.getState();
-        assert state.id.equals(BOT_ID);
-        assert state.client != null;
-        assert state.token != null;
+        String readFile = service.readFile(file);
+        assert readFile.equals(content);
 
-        boolean removeState = service.removeState();
-        assert removeState;
+        boolean deleteFile = service.deleteFile(file);
+        assert deleteFile;
     }
 }
 

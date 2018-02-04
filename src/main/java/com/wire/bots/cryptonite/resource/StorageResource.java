@@ -7,7 +7,6 @@ import com.wire.bots.sdk.storage.FileStorage;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.File;
 
 @Path("/storage")
 public class StorageResource {
@@ -35,13 +34,6 @@ public class StorageResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getState(@PathParam("botId") String botId) throws Exception {
         FileStorage storage = new FileStorage(App.configuration.path, botId);
-        File file = new File(storage.getPath());
-        if (!file.exists()) {
-            return Response
-                    .status(404)
-                    .build();
-        }
-
         NewBot state = storage.getState();
         return Response
                 .ok()
