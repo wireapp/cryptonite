@@ -1,8 +1,5 @@
-package com.wire.bots.cryptonite.test;
+package com.wire.bots.cryptonite;
 
-import com.wire.bots.cryptonite.App;
-import com.wire.bots.cryptonite.Config;
-import com.wire.bots.cryptonite.StorageService;
 import com.wire.bots.cryptonite.client.StorageClient;
 import com.wire.bots.cryptonite.resource.DbResource;
 import io.dropwizard.testing.junit.DropwizardAppRule;

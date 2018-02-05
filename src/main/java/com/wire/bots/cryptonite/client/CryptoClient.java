@@ -16,20 +16,21 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.net.URI;
 import java.util.ArrayList;
 
 public class CryptoClient {
     private final WebTarget target;
 
-    public CryptoClient(WebTarget target) {
-        this.target = target;
-    }
-
-    public CryptoClient(String uri) {
+    public CryptoClient(URI uri) {
         ClientConfig cfg = new ClientConfig(JacksonJsonProvider.class);
         target = JerseyClientBuilder
                 .createClient(cfg)
                 .target(uri);
+    }
+
+    public CryptoClient(WebTarget target) {
+        this.target = target;
     }
 
     public Recipients encrypt(String botId, PreKeys preKeys, String content) {

@@ -1,9 +1,5 @@
-package com.wire.bots.cryptonite.test;
+package com.wire.bots.cryptonite;
 
-import com.wire.bots.cryptonite.App;
-import com.wire.bots.cryptonite.Config;
-import com.wire.bots.cryptonite.CryptoRepo;
-import com.wire.bots.cryptonite.CryptoService;
 import com.wire.bots.cryptonite.client.CryptoClient;
 import com.wire.bots.cryptonite.resource.DecryptResource;
 import com.wire.bots.cryptonite.resource.EncryptDevicesResource;
@@ -25,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class ResourceTest {
+public class CryptoResourceTest {
     @ClassRule
     public static final DropwizardAppRule<Config> app = new DropwizardAppRule<>(App.class, "cryptonite.yaml");
     private final static String bobId = "bob";

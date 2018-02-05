@@ -1,8 +1,5 @@
-package com.wire.bots.cryptonite.test;
+package com.wire.bots.cryptonite;
 
-import com.wire.bots.cryptonite.App;
-import com.wire.bots.cryptonite.Config;
-import com.wire.bots.cryptonite.StorageService;
 import com.wire.bots.cryptonite.client.StorageClient;
 import com.wire.bots.cryptonite.resource.StorageResource;
 import com.wire.bots.sdk.server.model.NewBot;
@@ -21,7 +18,7 @@ public class StorageResourceTest {
             .addResource(new StorageResource())
             .build();
 
-    private final static String BOT_ID = "test";
+    private static final String BOT_ID = "test";
     private static final String SERVICE = "service";
     private static StorageService service;
 

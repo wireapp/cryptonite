@@ -8,6 +8,7 @@ import com.wire.bots.sdk.models.otr.PreKeys;
 import com.wire.bots.sdk.models.otr.Recipients;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Base64;
 
@@ -15,7 +16,12 @@ public class CryptoService implements Crypto {
     private final String botId;
     private final CryptoClient client;
 
-    public CryptoService(String botId, CryptoClient client) {
+    public CryptoService(String botId, URI uri) {
+        this.botId = botId;
+        this.client = new CryptoClient(uri);
+    }
+
+    CryptoService(String botId, CryptoClient client) {
         this.botId = botId;
         this.client = client;
     }

@@ -9,6 +9,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.net.URI;
 
 public class StorageClient {
     private static final String STORAGE = "storage";
@@ -16,15 +17,15 @@ public class StorageClient {
     private static final String FILENAME = "filename";
     private final WebTarget target;
 
-    public StorageClient(WebTarget target) {
-        this.target = target;
-    }
-
-    public StorageClient(String uri) {
+    public StorageClient(URI uri) {
         ClientConfig cfg = new ClientConfig(JacksonJsonProvider.class);
         target = JerseyClientBuilder
                 .createClient(cfg)
                 .target(uri);
+    }
+
+    public StorageClient(WebTarget target) {
+        this.target = target;
     }
 
     public boolean saveState(String botId, NewBot newBot) {

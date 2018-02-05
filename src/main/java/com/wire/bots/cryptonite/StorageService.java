@@ -4,12 +4,20 @@ import com.wire.bots.cryptonite.client.StorageClient;
 import com.wire.bots.sdk.server.model.NewBot;
 import com.wire.bots.sdk.storage.Storage;
 
+import java.net.URI;
+
 public class StorageService implements Storage {
     private final String botId;
     private final String service;
     private final StorageClient client;
 
-    public StorageService(String service, String botId, StorageClient client) {
+    public StorageService(String service, String botId, URI uri) {
+        this.botId = botId;
+        this.service = service;
+        this.client = new StorageClient(uri);
+    }
+
+    StorageService(String service, String botId, StorageClient client) {
         this.botId = botId;
         this.service = service;
         this.client = client;
