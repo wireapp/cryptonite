@@ -51,8 +51,8 @@ public class CryptoService implements Crypto {
     }
 
     @Override
-    public byte[] decrypt(String userId, String clientId, String cypher) throws Exception {
-        return client.decrypt(botId, userId, clientId, cypher).getBytes();
+    public String decrypt(String userId, String clientId, String cypher) throws Exception {
+        return client.decrypt(botId, userId, clientId, cypher);
     }
 
     @Override

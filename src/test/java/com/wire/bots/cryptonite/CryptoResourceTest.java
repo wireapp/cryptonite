@@ -17,9 +17,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 public class CryptoResourceTest {
     @ClassRule
@@ -58,7 +56,6 @@ public class CryptoResourceTest {
         HashMap<String, PreKey> devs = new HashMap<>();
         for (PreKey key : array) {
             devs.put(clientId, key);
-            System.out.printf("%s, %s, keyId: %s, prekey: %s\n", userId, clientId, key.id, key.key);
         }
 
         PreKeys keys = new PreKeys();
@@ -69,63 +66,77 @@ public class CryptoResourceTest {
     @Test
     public void testAliceToBob() throws Exception {
         String text = "Hello Bob, This is Alice!";
-        byte[] textBytes = text.getBytes();
+        byte[] bytes = text.getBytes();
 
         // Encrypt using prekeys
-        Recipients encrypt = alice.encrypt(bobKeys, textBytes);
+        Recipients encrypt = alice.encrypt(bobKeys, bytes);
 
         String base64Encoded = encrypt.get(bobId, bobClientId);
-        System.out.printf("Alice -> (%s,%s) cipher: %s\n", bobId, bobClientId, base64Encoded);
 
         // Decrypt using initSessionFromMessage
-        byte[] decrypt = bob.decrypt(aliceId, aliceClientId, base64Encoded);
-        String text2 = new String(decrypt);
+        String decrypt = bob.decrypt(aliceId, aliceClientId, base64Encoded);
 
-        boolean equals = Arrays.equals(decrypt, textBytes);
-        assert equals;
-        assert text.equals(text2);
+        byte[] decode = Base64.getDecoder().decode(decrypt);
+
+        assert Arrays.equals(decode, bytes);
+        assert text.equals(new String(decode));
     }
 
     @Test
     public void testBobToAlice() throws Exception {
         String text = "Hello Alice, This is Bob!";
-        byte[] textBytes = text.getBytes();
+        byte[] bytes = text.getBytes();
 
-        Recipients encrypt = bob.encrypt(aliceKeys, textBytes);
+        Recipients encrypt = bob.encrypt(aliceKeys, bytes);
 
         String base64Encoded = encrypt.get(aliceId, aliceClientId);
-        System.out.printf("Bob -> (%s,%s) cipher: %s\n", aliceId, aliceClientId, base64Encoded);
 
         // Decrypt using initSessionFromMessage
-        byte[] decrypt = alice.decrypt(bobId, bobClientId, base64Encoded);
-        String text2 = new String(decrypt);
+        String decrypt = alice.decrypt(bobId, bobClientId, base64Encoded);
 
-        boolean equals = Arrays.equals(decrypt, textBytes);
-        assert equals;
+        byte[] decode = Base64.getDecoder().decode(decrypt);
 
-        assert text.equals(text2);
+        assert Arrays.equals(decode, bytes);
+        assert text.equals(new String(decode));
     }
 
     @Test
     public void testSessions() throws Exception {
         String text = "Hello Alice, This is Bob, again!";
-        byte[] textBytes = text.getBytes();
+        byte[] bytes = text.getBytes();
 
         Missing devices = new Missing();
         devices.add(aliceId, aliceClientId);
-        Recipients encrypt = bob.encrypt(devices, textBytes);
+        Recipients encrypt = bob.encrypt(devices, bytes);
 
         String base64Encoded = encrypt.get(aliceId, aliceClientId);
-        System.out.printf("Bob -> (%s,%s) cipher: %s\n", aliceId, aliceClientId, base64Encoded);
 
         // Decrypt using session
-        byte[] decrypt = alice.decrypt(bobId, bobClientId, base64Encoded);
-        String text2 = new String(decrypt);
+        String decrypt = alice.decrypt(bobId, bobClientId, base64Encoded);
 
-        boolean equals = Arrays.equals(decrypt, textBytes);
-        assert equals;
+        byte[] decode = Base64.getDecoder().decode(decrypt);
 
-        assert text.equals(text2);
+        assert Arrays.equals(decode, bytes);
+        assert text.equals(new String(decode));
+    }
+
+    @Test
+    public void testAliceToBoBinary() throws Exception {
+        Random random = new Random();
+        byte[] bytes = new byte[128];
+        random.nextBytes(bytes);
+
+        // Encrypt using prekeys
+        Recipients encrypt = alice.encrypt(bobKeys, bytes);
+
+        String base64Encoded = encrypt.get(bobId, bobClientId);
+
+        // Decrypt using initSessionFromMessage
+        String decrypt = bob.decrypt(aliceId, aliceClientId, base64Encoded);
+
+        byte[] decode = Base64.getDecoder().decode(decrypt);
+
+        assert Arrays.equals(decode, bytes);
     }
 
     @Test

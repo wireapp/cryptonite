@@ -4,7 +4,7 @@ import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 import com.wire.bots.cryptonite.CryptoRepo;
 import com.wire.bots.cryptonite.model.CipherMessage;
-import com.wire.bots.sdk.crypto.Crypto;
+import com.wire.bots.sdk.crypto.CryptoFile;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -31,12 +31,11 @@ public class DecryptResource {
     public Response decrypt(@ApiParam @PathParam("botId") String botId,
                             @ApiParam CipherMessage payload) throws Exception {
 
-        Crypto manager = cryptoRepo.get(botId);
-        byte[] decrypt = manager.decrypt(payload.userId, payload.clientId, payload.content);
-
+        CryptoFile manager = cryptoRepo.get(botId);
+        String decrypt = manager.decrypt(payload.userId, payload.clientId, payload.content);
         return Response
                 .ok()
-                .entity(new String(decrypt))
+                .entity(decrypt)
                 .build();
     }
 }
