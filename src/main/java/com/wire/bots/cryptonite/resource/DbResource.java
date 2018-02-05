@@ -3,6 +3,7 @@ package com.wire.bots.cryptonite.resource;
 import com.wire.bots.cryptonite.App;
 import com.wire.bots.sdk.storage.FileStorage;
 
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
@@ -11,15 +12,8 @@ public class DbResource {
     @POST
     public Response saveFile(@PathParam("service") String service,
                              @PathParam("botId") String botId,
-                             @QueryParam("filename") String filename,
+                             @NotNull @QueryParam("filename") String filename,
                              String payload) throws Exception {
-        if (filename == null) {
-            return Response
-                    .status(400)
-                    .entity("Missing filename")
-                    .build();
-
-        }
 
         FileStorage storage = getFileStorage(service, botId);
         storage.saveFile(filename, payload);
@@ -31,17 +25,16 @@ public class DbResource {
     @GET
     public Response getFile(@PathParam("service") String service,
                             @PathParam("botId") String botId,
-                            @QueryParam("filename") String filename
-    ) throws Exception {
-        if (filename == null) {
-            return Response
-                    .status(400)
-                    .entity("Missing filename")
-                    .build();
-
-        }
+                            @NotNull @QueryParam("filename") String filename) throws Exception {
 
         FileStorage storage = getFileStorage(service, botId);
+        if (!storage.hasFile(filename)) {
+            return Response
+                    .status(404)
+                    .entity("Cannot find file: " + filename)
+                    .build();
+        }
+
         String content = storage.readFile(filename);
         return Response
                 .ok()
@@ -52,8 +45,7 @@ public class DbResource {
     @DELETE
     public Response deleteFile(@PathParam("service") String service,
                                @PathParam("botId") String botId,
-                               @QueryParam("filename") String filename
-    ) throws Exception {
+                               @NotNull @QueryParam("filename") String filename) throws Exception {
         FileStorage storage = getFileStorage(service, botId);
         boolean removed = storage.deleteFile(filename);
         return Response
