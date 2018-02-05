@@ -10,13 +10,6 @@ import javax.ws.rs.core.Response;
 
 @Path("/storage")
 public class StorageResource {
-    @GET
-    public Response getStatus() throws Exception {
-        return Response
-                .ok()
-                .build();
-    }
-
     @POST
     @Path("{botId}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -34,6 +27,11 @@ public class StorageResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getState(@PathParam("botId") String botId) throws Exception {
         FileStorage storage = new FileStorage(App.configuration.path, botId);
+        if (!storage.hasState()) {
+            return Response
+                    .status(404)
+                    .build();
+        }
         NewBot state = storage.getState();
         return Response
                 .ok()
@@ -42,7 +40,7 @@ public class StorageResource {
     }
 
     @DELETE
-    @Path("/{botId}")
+    @Path("{botId}")
     public Response removeState(@PathParam("botId") String botId) throws Exception {
         FileStorage storage = new FileStorage(App.configuration.path, botId);
         boolean removed = storage.removeState();
