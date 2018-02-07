@@ -26,6 +26,7 @@ public class CryptoResourceTest {
     private final static String bobClientId = "bob_device";
     private final static String aliceId = "alice";
     private final static String aliceClientId = "alice_device";
+    private static final String SERVICE = "test_service";
     private static CryptoRepo cryptoRepo = new CryptoRepo();
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
@@ -41,7 +42,7 @@ public class CryptoResourceTest {
 
     @BeforeClass
     public static void setUp() throws Exception {
-        CryptoClient client = new CryptoClient(resources.target(""));
+        CryptoClient client = new CryptoClient(SERVICE, resources.target(""));
         alice = new CryptoService(aliceId, client);
         bob = new CryptoService(bobId, client);
 

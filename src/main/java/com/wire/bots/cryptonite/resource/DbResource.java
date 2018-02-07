@@ -54,7 +54,7 @@ public class DbResource {
     }
 
     private FileStorage getFileStorage(String service, String botId) {
-        String path = String.format("%s/%s", App.configuration.path, service);
+        String path = String.format("%s/%s/db/", App.configuration.path, service);
         return new FileStorage(path, botId);
     }
 }

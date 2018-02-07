@@ -4,6 +4,7 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.wire.bots.sdk.server.model.NewBot;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.JerseyClientBuilder;
+import org.glassfish.jersey.client.JerseyWebTarget;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -12,25 +13,32 @@ import javax.ws.rs.core.Response;
 import java.net.URI;
 
 public class StorageClient {
-    private static final String STORAGE = "storage";
-    private static final String DB = "db";
     private static final String FILENAME = "filename";
-    private final WebTarget target;
+    private final WebTarget storage;
+    private final WebTarget db;
 
-    public StorageClient(URI uri) {
+    public StorageClient(String service, URI uri) {
         ClientConfig cfg = new ClientConfig(JacksonJsonProvider.class);
-        target = JerseyClientBuilder
+        JerseyWebTarget target = JerseyClientBuilder
                 .createClient(cfg)
                 .target(uri);
+
+        storage = target
+                .path("storage")
+                .path(service);
+        db = target.
+                path("db")
+                .path(service);
     }
 
-    public StorageClient(WebTarget target) {
-        this.target = target;
+    // Testing only
+    public StorageClient(WebTarget storage, WebTarget db) {
+        this.storage = storage;
+        this.db = db;
     }
 
     public boolean saveState(String botId, NewBot newBot) {
-        Response response = target.
-                path(STORAGE).
+        Response response = storage.
                 path(botId).
                 request(MediaType.APPLICATION_JSON).
                 post(Entity.entity(newBot, MediaType.APPLICATION_JSON));
@@ -39,8 +47,7 @@ public class StorageClient {
     }
 
     public NewBot getState(String botId) {
-        Response response = target.
-                path(STORAGE).
+        Response response = storage.
                 path(botId).
                 request(MediaType.APPLICATION_JSON).
                 get();
@@ -51,16 +58,8 @@ public class StorageClient {
         return response.readEntity(NewBot.class);
     }
 
-    public boolean status() {
-        Response response = target.
-                request(MediaType.APPLICATION_JSON).
-                get();
-        return response.getStatus() == 200;
-    }
-
     public boolean removeState(String botId) {
-        Response delete = target.
-                path(STORAGE).
+        Response delete = storage.
                 path(botId).
                 request(MediaType.APPLICATION_JSON).
                 delete();
@@ -68,10 +67,8 @@ public class StorageClient {
         return delete.getStatus() == 200;
     }
 
-    public boolean saveFile(String service, String botId, String filename, String content) {
-        Response response = target.
-                path(DB).
-                path(service).
+    public boolean saveFile(String botId, String filename, String content) {
+        Response response = db.
                 path(botId).
                 queryParam(FILENAME, filename).
                 request().
@@ -80,10 +77,8 @@ public class StorageClient {
         return response.getStatus() == 200;
     }
 
-    public String readFile(String service, String botId, String filename) {
-        Response response = target.
-                path(DB).
-                path(service).
+    public String readFile(String botId, String filename) {
+        Response response = db.
                 path(botId).
                 queryParam(FILENAME, filename).
                 request().
@@ -95,10 +90,8 @@ public class StorageClient {
         return response.readEntity(String.class);
     }
 
-    public boolean deleteFile(String service, String botId, String filename) {
-        Response delete = target.
-                path(DB).
-                path(service).
+    public boolean deleteFile(String botId, String filename) {
+        Response delete = db.
                 path(botId).
                 queryParam(FILENAME, filename).
                 request().

@@ -21,15 +21,18 @@ import java.util.ArrayList;
 
 public class CryptoClient {
     private final WebTarget target;
+    private final String service;
 
-    public CryptoClient(URI uri) {
+    public CryptoClient(String service, URI uri) {
+        this.service = service;
         ClientConfig cfg = new ClientConfig(JacksonJsonProvider.class);
         target = JerseyClientBuilder
                 .createClient(cfg)
                 .target(uri);
     }
 
-    public CryptoClient(WebTarget target) {
+    public CryptoClient(String service, WebTarget target) {
+        this.service = service;
         this.target = target;
     }
 
@@ -40,6 +43,7 @@ public class CryptoClient {
 
         Response response = target.
                 path("encrypt/prekeys").
+                path(service).
                 path(botId).
                 request(MediaType.APPLICATION_JSON).
                 post(Entity.entity(prekeysMessage, MediaType.APPLICATION_JSON));
@@ -54,6 +58,7 @@ public class CryptoClient {
 
         Response response = target.
                 path("encrypt/devices").
+                path(service).
                 path(botId).
                 request(MediaType.APPLICATION_JSON).
                 post(Entity.entity(devicesMessage, MediaType.APPLICATION_JSON));
@@ -69,6 +74,7 @@ public class CryptoClient {
 
         Response response = target.
                 path("decrypt").
+                path(service).
                 path(botId).
                 request(MediaType.TEXT_PLAIN).
                 post(Entity.entity(msg, MediaType.APPLICATION_JSON));
@@ -79,6 +85,7 @@ public class CryptoClient {
     public ArrayList<PreKey> newPreKeys(String botId, int from, int n) {
         return target.
                 path("encrypt/prekeys").
+                path(service).
                 path(botId).
                 queryParam("from", from).
                 queryParam("n", n).
@@ -90,6 +97,7 @@ public class CryptoClient {
     public PreKey newLastPreKey(String botId) {
         return target.
                 path("encrypt/prekeys").
+                path(service).
                 path(botId).
                 path("last").
                 request(MediaType.APPLICATION_JSON).

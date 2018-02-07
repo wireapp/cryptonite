@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 @Api
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.TEXT_PLAIN)
-@Path("/decrypt/{botId}")
+@Path("/decrypt/{service}/{botId}")
 public class DecryptResource {
     private final CryptoRepo cryptoRepo;
 
@@ -28,10 +28,11 @@ public class DecryptResource {
     @Timed(name = "crypto.decrypt.post.time")
     @Metered(name = "crypto.decrypt.post.meter")
     @ApiOperation(value = "Decrypt")
-    public Response decrypt(@ApiParam @PathParam("botId") String botId,
+    public Response decrypt(@ApiParam @PathParam("service") String service,
+                            @ApiParam @PathParam("botId") String botId,
                             @ApiParam CipherMessage payload) throws Exception {
 
-        CryptoFile manager = cryptoRepo.get(botId);
+        CryptoFile manager = cryptoRepo.get(service, botId);
         String decrypt = manager.decrypt(payload.userId, payload.clientId, payload.content);
         return Response
                 .ok()

@@ -18,7 +18,7 @@ import java.util.Base64;
 @Api
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@Path("/encrypt/devices/{botId}")
+@Path("/encrypt/devices/{service}/{botId}")
 public class EncryptDevicesResource {
     private final CryptoRepo cryptoRepo;
 
@@ -30,13 +30,13 @@ public class EncryptDevicesResource {
     @Timed(name = "crypto.encrypt.devices.post.time")
     @Metered(name = "crypto.encrypt.devices.post.meter")
     @ApiOperation(value = "Encrypt with Devices")
-    public Response encrypt(@ApiParam @PathParam("botId") String botId,
+    public Response encrypt(@ApiParam @PathParam("service") String service,
+                            @ApiParam @PathParam("botId") String botId,
                             @ApiParam DevicesMessage payload) throws Exception {
 
-        Crypto manager = cryptoRepo.get(botId);
+        Crypto manager = cryptoRepo.get(service, botId);
         byte[] content = Base64.getDecoder().decode(payload.content);
         Recipients encrypt = manager.encrypt(payload.missing, content);
-
         return Response
                 .ok()
                 .entity(encrypt)
