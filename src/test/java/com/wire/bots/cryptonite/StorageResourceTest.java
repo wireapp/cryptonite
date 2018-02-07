@@ -10,6 +10,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import javax.ws.rs.client.WebTarget;
+import java.util.ArrayList;
 
 public class StorageResourceTest {
     @ClassRule
@@ -47,6 +48,9 @@ public class StorageResourceTest {
         assert state.id.equals(BOT_ID);
         assert state.client != null;
         assert state.token != null;
+
+        ArrayList<NewBot> newBots = service.listAllStates();
+        assert !newBots.isEmpty();
 
         //boolean removeState = service.removeState();
         //assert removeState;

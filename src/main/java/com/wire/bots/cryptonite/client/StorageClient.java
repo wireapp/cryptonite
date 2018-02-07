@@ -8,9 +8,11 @@ import org.glassfish.jersey.client.JerseyWebTarget;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.util.ArrayList;
 
 public class StorageClient {
     private static final String FILENAME = "filename";
@@ -67,6 +69,15 @@ public class StorageClient {
         return delete.getStatus() == 200;
     }
 
+    public ArrayList<NewBot> listAllStates(String botId) {
+        return storage.
+                path(botId).
+                path("list").
+                request(MediaType.APPLICATION_JSON).
+                get(new GenericType<ArrayList<NewBot>>() {
+                });
+    }
+
     public boolean saveFile(String botId, String filename, String content) {
         Response response = db.
                 path(botId).
@@ -99,4 +110,5 @@ public class StorageClient {
 
         return delete.getStatus() == 200;
     }
+
 }

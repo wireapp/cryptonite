@@ -43,6 +43,19 @@ public class StorageResource {
                 .build();
     }
 
+    @GET
+    @Path("/list")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listAllStates(@PathParam("service") String service,
+                                  @PathParam("botId") String botId) throws Exception {
+
+        FileStorage storage = getFileStorage(service, botId);
+        return Response
+                .ok()
+                .entity(storage.listAllStates())
+                .build();
+    }
+
     @DELETE
     public Response removeState(@PathParam("service") String service,
                                 @PathParam("botId") String botId) throws Exception {

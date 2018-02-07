@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -48,8 +49,8 @@ public class EncryptPrekeysResource {
     @GET
     public Response getPrekeys(@ApiParam @PathParam("service") String service,
                                @ApiParam @PathParam("botId") String botId,
-                               @QueryParam("from") Integer from,
-                               @QueryParam("n") Integer n) throws Exception {
+                               @NotNull @QueryParam("from") Integer from,
+                               @NotNull @QueryParam("n") Integer n) throws Exception {
 
         CryptoFile crypto = cryptoRepo.get(service, botId);
         ArrayList<PreKey> preKeys = crypto.newPreKeys(from, n);
@@ -71,4 +72,5 @@ public class EncryptPrekeysResource {
                 .entity(preKey)
                 .build();
     }
+
 }

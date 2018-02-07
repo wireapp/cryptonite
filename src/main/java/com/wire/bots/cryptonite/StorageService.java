@@ -5,6 +5,7 @@ import com.wire.bots.sdk.server.model.NewBot;
 import com.wire.bots.sdk.storage.Storage;
 
 import java.net.URI;
+import java.util.ArrayList;
 
 public class StorageService implements Storage {
     private final String botId;
@@ -34,6 +35,11 @@ public class StorageService implements Storage {
     @Override
     public boolean removeState() throws Exception {
         return client.removeState(botId);
+    }
+
+    @Override
+    public ArrayList<NewBot> listAllStates() throws Exception {
+        return client.listAllStates(botId);
     }
 
     @Override
