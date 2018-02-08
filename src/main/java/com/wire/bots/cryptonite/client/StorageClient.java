@@ -18,6 +18,7 @@ public class StorageClient {
     private static final String FILENAME = "filename";
     private final WebTarget storage;
     private final WebTarget db;
+    private final WebTarget list;
 
     public StorageClient(String service, URI uri) {
         ClientConfig cfg = new ClientConfig(JacksonJsonProvider.class);
@@ -28,15 +29,21 @@ public class StorageClient {
         storage = target
                 .path("storage")
                 .path(service);
+        list = target
+                .path("storage")
+                .path("list")
+                .path(service);
         db = target.
                 path("db")
                 .path(service);
+
     }
 
     // Testing only
-    public StorageClient(WebTarget storage, WebTarget db) {
+    public StorageClient(WebTarget storage, WebTarget db, WebTarget list) {
         this.storage = storage;
         this.db = db;
+        this.list = list;
     }
 
     public boolean saveState(String botId, NewBot newBot) {
@@ -69,10 +76,8 @@ public class StorageClient {
         return delete.getStatus() == 200;
     }
 
-    public ArrayList<NewBot> listAllStates(String botId) {
-        return storage.
-                path(botId).
-                path("list").
+    public ArrayList<NewBot> listAllStates() {
+        return list.
                 request(MediaType.APPLICATION_JSON).
                 get(new GenericType<ArrayList<NewBot>>() {
                 });

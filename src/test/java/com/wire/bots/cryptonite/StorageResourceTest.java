@@ -1,6 +1,7 @@
 package com.wire.bots.cryptonite;
 
 import com.wire.bots.cryptonite.client.StorageClient;
+import com.wire.bots.cryptonite.resource.StorageListResource;
 import com.wire.bots.cryptonite.resource.StorageResource;
 import com.wire.bots.sdk.server.model.NewBot;
 import io.dropwizard.testing.junit.DropwizardAppRule;
@@ -19,6 +20,7 @@ public class StorageResourceTest {
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
             .addResource(new StorageResource())
+            .addResource(new StorageListResource())
             .build();
 
     private static final String BOT_ID = "bob";
@@ -28,9 +30,9 @@ public class StorageResourceTest {
     @BeforeClass
     public static void setUp() throws Exception {
         WebTarget storage = resources.target("storage").path(SERVICE);
-        WebTarget db = resources.target("db").path(SERVICE);
+        WebTarget list = resources.target("storage/list").path(SERVICE);
 
-        StorageClient client = new StorageClient(storage, db);
+        StorageClient client = new StorageClient(storage, null, list);
         service = new StorageService(BOT_ID, client);
     }
 
@@ -52,8 +54,8 @@ public class StorageResourceTest {
         ArrayList<NewBot> newBots = service.listAllStates();
         assert !newBots.isEmpty();
 
-        //boolean removeState = service.removeState();
-        //assert removeState;
+        boolean removeState = service.removeState();
+        assert removeState;
     }
 }
 

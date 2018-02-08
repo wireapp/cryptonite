@@ -39,7 +39,7 @@ public class StorageService implements Storage {
 
     @Override
     public ArrayList<NewBot> listAllStates() throws Exception {
-        return client.listAllStates(botId);
+        return client.listAllStates();
     }
 
     @Override

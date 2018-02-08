@@ -28,7 +28,7 @@ public class DbResourceTest {
         WebTarget storage = resources.target("storage").path(SERVICE);
         WebTarget db = resources.target("db").path(SERVICE);
 
-        StorageClient client = new StorageClient(storage, db);
+        StorageClient client = new StorageClient(storage, db, null);
         service = new StorageService(BOT_ID, client);
     }
 
@@ -42,8 +42,8 @@ public class DbResourceTest {
         String readFile = service.readFile(file);
         assert readFile.equals(content);
 
-        //boolean deleteFile = service.deleteFile(file);
-        //assert deleteFile;
+        boolean deleteFile = service.deleteFile(file);
+        assert deleteFile;
     }
 }
 
