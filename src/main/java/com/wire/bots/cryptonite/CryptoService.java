@@ -21,7 +21,7 @@ public class CryptoService implements Crypto {
         this.client = new CryptoClient(service, uri);
     }
 
-    CryptoService(String botId, CryptoClient client) {
+    public CryptoService(String botId, CryptoClient client) {
         this.botId = botId;
         this.client = client;
     }

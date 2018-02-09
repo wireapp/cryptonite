@@ -16,6 +16,9 @@ import java.util.ArrayList;
 
 public class StorageClient {
     private static final String FILENAME = "filename";
+    private static final String STORAGE = "storage";
+    private static final String LIST = "list";
+    private static final String DB = "db";
     private final WebTarget storage;
     private final WebTarget db;
     private final WebTarget list;
@@ -27,14 +30,14 @@ public class StorageClient {
                 .target(uri);
 
         storage = target
-                .path("storage")
+                .path(STORAGE)
                 .path(service);
         list = target
-                .path("storage")
-                .path("list")
+                .path(STORAGE)
+                .path(LIST)
                 .path(service);
         db = target.
-                path("db")
+                path(DB)
                 .path(service);
 
     }

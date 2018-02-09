@@ -16,8 +16,7 @@ public class StorageService implements Storage {
         this.client = new StorageClient(service, uri);
     }
 
-    // For Unit testing only
-    StorageService(String botId, StorageClient client) {
+    public StorageService(String botId, StorageClient client) {
         this.botId = botId;
         this.client = client;
     }
