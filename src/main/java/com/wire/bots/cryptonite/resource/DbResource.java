@@ -48,8 +48,14 @@ public class DbResource {
                                @NotNull @QueryParam("filename") String filename) throws Exception {
         FileStorage storage = getFileStorage(service, botId);
         boolean removed = storage.deleteFile(filename);
+        if (removed)
+            return Response
+                    .ok()
+                    .build();
+
         return Response
-                .ok(removed)
+                .status(409)
+                .entity("Could not delete file")
                 .build();
     }
 
