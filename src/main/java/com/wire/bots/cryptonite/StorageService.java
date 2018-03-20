@@ -55,4 +55,19 @@ public class StorageService implements Storage {
     public boolean deleteFile(String filename) throws Exception {
         return client.deleteFile(botId, filename);
     }
+
+    @Override
+    public boolean saveGlobalFile(String filename, String content) throws Exception {
+        return client.saveGlobalFile(filename, content);
+    }
+
+    @Override
+    public String readGlobalFile(String filename) throws Exception {
+        return client.readGlobalFile(filename);
+    }
+
+    @Override
+    public boolean deleteGlobalFile(String filename) throws Exception {
+        return client.deleteGlobalFile(filename);
+    }
 }

@@ -119,4 +119,33 @@ public class StorageClient {
         return delete.getStatus() == 200;
     }
 
+    public boolean saveGlobalFile(String filename, String content) {
+        Response response = db.
+                queryParam(FILENAME, filename).
+                request().
+                post(Entity.entity(content, MediaType.TEXT_PLAIN));
+
+        return response.getStatus() == 200;
+    }
+
+    public String readGlobalFile(String filename) {
+        Response response = db.
+                queryParam(FILENAME, filename).
+                request().
+                get();
+
+        if (response.getStatus() != 200)
+            return null;
+
+        return response.readEntity(String.class);
+    }
+
+    public boolean deleteGlobalFile(String filename) {
+        Response delete = db.
+                queryParam(FILENAME, filename).
+                request().
+                delete();
+
+        return delete.getStatus() == 200;
+    }
 }

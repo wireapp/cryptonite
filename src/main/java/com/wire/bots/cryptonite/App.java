@@ -31,6 +31,7 @@ public class App extends Application<Config> {
         environment.jersey().register(new EncryptDevicesResource(cryptoRepo));
         environment.jersey().register(new DecryptResource(cryptoRepo));
         environment.jersey().register(new StorageResource());
+        environment.jersey().register(new GlobalDbResource());
         environment.jersey().register(new StorageListResource());
         environment.jersey().register(new DbResource());
         environment.jersey().register(new StatusResource());
